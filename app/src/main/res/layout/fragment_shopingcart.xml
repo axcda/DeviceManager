@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.ShopingcartFragment">
+
+    <!-- 背景图片 -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/infobackground" />
+
+    <!-- 可刷新的RecyclerView -->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/fragment_shoppingcart_SRL"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fragment_shoppingcart_rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <!-- 底部操作栏 -->
+    <RelativeLayout
+        android:background="#4aa5ef"
+        android:layout_gravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <!-- 全选图标 -->
+        <ImageView
+            android:id="@+id/fragment_shoppingcart_choiceall_iv"
+            android:layout_marginLeft="12dp"
+            android:src="@drawable/choice"
+            android:layout_width="25dp"
+            android:layout_height="25dp" />
+
+        <!-- 全选文本 -->
+        <TextView
+            android:layout_toRightOf="@id/fragment_shoppingcart_choiceall_iv"
+            android:layout_marginTop="6dp"
+            android:layout_marginLeft="10dp"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:text="全选"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <!-- 金额图标 -->
+        <ImageView
+            android:id="@+id/fragment_shoppingcart_money_iv"
+            android:layout_marginTop="7dp"
+            android:layout_marginLeft="148dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/meiguo"
+            android:layout_width="25dp"
+            android:layout_height="25dp" />
+
+        <!-- 总金额 -->
+        <TextView
+            android:id="@+id/fragment_shoppingcart_sum_tv"
+            android:layout_toRightOf="@id/fragment_shoppingcart_money_iv"
+            android:layout_marginTop="6dp"
+            android:textColor="#fc0505"
+            android:textSize="20sp"
+            android:text="0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <!-- 结账按钮 -->
+        <TextView
+            android:id="@+id/fragment_shoppingcart_account_tv"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="6dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:textSize="20sp"
+            android:textColor="#000000"
+            android:text="结账"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+</FrameLayout>
