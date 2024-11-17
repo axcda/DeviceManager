@@ -18,11 +18,12 @@ import zjc.devicemanage.util.MyApplication;
 import zjc.devicemanage.util.MyHttpUtil;
 
 public class ShopingcartServiceImp implements ShopingcartService {
-    //从web服务器获取的“购物车列表”属性
+    // 从web服务器获取的“购物车列表”属性
     private ShopingcartList shopingcartListFromJson;
     private HomeFragment homeFragment;
     private ShopingcartFragment shopingcartFragment;
-// 注入委托类的构造函数
+
+    // 注入委托类的构造函数
     public ShopingcartServiceImp(HomeFragment homeFragment) {
         this.homeFragment = homeFragment;
     }
@@ -32,30 +33,32 @@ public class ShopingcartServiceImp implements ShopingcartService {
     }
 
     private void parseJSONtoShopingcartList(String responseData) {
-        Gson gson=new Gson();
-        shopingcartListFromJson= gson.fromJson(responseData,
-                new TypeToken<ShopingcartList>(){}.getType());
-        Log.i("zjc",shopingcartListFromJson.toString());
+        Gson gson = new Gson();
+        shopingcartListFromJson = gson.fromJson(responseData,
+                new TypeToken<ShopingcartList>() {}.getType());
+        Log.i("zjc", shopingcartListFromJson.toString());
     }
+
     @Override
     public void findAllShopingcart() {
-        //构造findAllShopingcart的tomcat服务请求URL
+        // 构造findAllShopingcart的tomcat服务请求URL
         String findAllShopingcartURL = MyHttpUtil.host + "/DeviceManage/findAllShopingcart";
-        Log.i("zjc",findAllShopingcartURL);
+        Log.i("zjc", findAllShopingcartURL);
         sendRequest(findAllShopingcartURL);
     }
+
     @Override
     public void findAllShopingcartByUserId(String userId, CheckCallback callback) {
-        String findAllShopingcartByUserIdURL = MyHttpUtil.host + 
+        String findAllShopingcartByUserIdURL = MyHttpUtil.host +
                 "/DeviceManage/findAllShopingcartByUserId?userId=" + userId;
         Log.i("zjc", findAllShopingcartByUserIdURL);
-        
+
         MyHttpUtil.sendOkhttpGetRequest(findAllShopingcartByUserIdURL, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.e("zjc", "Web接口服务连接失败: " + e.getMessage());
                 MyApplication.subThreadToast(
-                    "Web接口服务连接失败，请确保主机IP地址正确且Tomcat服务器已启动");
+                        "Web接口服务连接失败，请确保主机IP地址正确且Tomcat服务器已启动");
                 if (callback != null) {
                     callback.onResult(null);
                 }
@@ -73,6 +76,7 @@ public class ShopingcartServiceImp implements ShopingcartService {
             }
         });
     }
+
     // 抽取共同的请求处理逻辑
     private void sendRequest(String url) {
         MyHttpUtil.sendOkhttpGetRequest(url, new Callback() {
@@ -80,23 +84,27 @@ public class ShopingcartServiceImp implements ShopingcartService {
             public void onFailure(Call call, IOException e) {
                 Log.e("zjc", "Web接口服务连接失败: " + e.getMessage());
                 MyApplication.subThreadToast(
-                    "Web接口服务连接失败，请确保主机IP地址正确且Tomcat服务器已启动");
+                        "Web接口服务连接失败，请确保主机IP地址正确且Tomcat服务器已启动");
             }
+
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 parseJSONtoShopingcartList(response.body().string());
-                shopingcartFragment.showAllShopingcartCallback(
-                        shopingcartListFromJson);
+                if (shopingcartFragment != null) {
+                    shopingcartFragment.showAllShopingcartCallback(
+                            shopingcartListFromJson);
+                }
             }
         });
     }
+
     @Override
     public void addToCart(String userId, String deviceId, String buyNum) {
         String addToCartURL = MyHttpUtil.host + "/DeviceManage/addToCart" +
                 "?userId=" + userId +
                 "&deviceId=" + deviceId +
                 "&buyNum=" + buyNum;
-        
+
         MyHttpUtil.sendOkhttpGetRequest(addToCartURL, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -118,7 +126,7 @@ public class ShopingcartServiceImp implements ShopingcartService {
 
     @Override
     public void addShopingcart(final String addDeviceID, String addBuyNum, String addUserID) {
-        // Construct the request URL
+        // 构造请求URL
         String addShopingcartURL = MyHttpUtil.host + "/DeviceManage/addShopingcart" +
                 "?addDeviceID=" + addDeviceID +
                 "&addBuyNum=" + addBuyNum +

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -350,5 +351,19 @@ public class ShopingcartFragment extends Fragment {
         if (userId != null) {
             initShopingcartData(userId);
         }
+    }
+
+    public void showAddShopingcartCallback(final String addDeviceID) {
+        if (getActivity() == null) return;
+
+        getActivity().runOnUiThread(() -> {
+            // Show success message
+            Toast.makeText(getContext(), 
+                "设备编号" + addDeviceID + "加入购物车成功！", 
+                Toast.LENGTH_LONG).show();
+                
+            // Refresh the shopping cart data
+            refreshData();
+        });
     }
 }

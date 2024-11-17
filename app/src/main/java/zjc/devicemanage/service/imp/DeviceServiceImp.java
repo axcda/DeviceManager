@@ -17,25 +17,29 @@ import zjc.devicemanage.util.MyHttpUtil;
 
 public class DeviceServiceImp implements DeviceService {
     private DeviceList deviceListFromJson;
-    private void parseJSONtoDeviceList(String responseData)  {
-        Gson gson=new Gson();
-        deviceListFromJson = gson.fromJson(responseData,
-                new TypeToken<DeviceList>(){}.getType());
-        Log.i("zjc",deviceListFromJson.toString());
-    }
     private HomeFragment homeFragment;
-    public DeviceServiceImp(HomeFragment homeFragment){
+
+    public DeviceServiceImp(HomeFragment homeFragment) {
         this.homeFragment = homeFragment;
     }
+
+    private void parseJSONtoDeviceList(String responseData) {
+        Gson gson = new Gson();
+        deviceListFromJson = gson.fromJson(responseData,
+                new TypeToken<DeviceList>() {}.getType());
+        Log.i("zjc", deviceListFromJson.toString());
+    }
+
     @Override
     public void findAllDevice() {
         // 构造findAllDevice的tomcat服务请求URL
-        String findAllDeviceURL = MyHttpUtil.host +"/DeviceManage/findAllDevice";
-        Log.i("zjc",findAllDeviceURL);
+        String findAllDeviceURL = MyHttpUtil.host + "/DeviceManage/findAllDevice";
+        Log.i("zjc", findAllDeviceURL);
         MyHttpUtil.sendOkhttpGetRequest(findAllDeviceURL, new Callback() {
             public void onFailure(Call call, IOException e) {
-                Log.i("zjc",e.getMessage());
+                Log.i("zjc", e.getMessage());
             }
+
             public void onResponse(Call call, Response response) throws IOException {
                 parseJSONtoDeviceList(response.body().string());
                 homeFragment.showAllDeviceCallback(deviceListFromJson);
@@ -46,14 +50,15 @@ public class DeviceServiceImp implements DeviceService {
     @Override
     public void findDeviceByDeviceClassId(int deviceClassId) {
         // 构造findDeviceByDeviceClassId的tomcat服务请求URL
-        String findDeviceByDeviceClassId =MyHttpUtil.host +
-                "/DeviceManage/findDeviceByDeviceClassId?deviceClassId=" + new Integer(deviceClassId).toString();
-        Log.i("zjc",findDeviceByDeviceClassId);
-        MyHttpUtil.sendOkhttpGetRequest(findDeviceByDeviceClassId,new Callback() {
-            public void onFailure(Call call,IOException e) {
-                Log.i("zjc",e.getMessage());
+        String findDeviceByDeviceClassIdURL = MyHttpUtil.host +
+                "/DeviceManage/findDeviceByDeviceClassId?deviceClassId=" + deviceClassId;
+        Log.i("zjc", findDeviceByDeviceClassIdURL);
+        MyHttpUtil.sendOkhttpGetRequest(findDeviceByDeviceClassIdURL, new Callback() {
+            public void onFailure(Call call, IOException e) {
+                Log.i("zjc", e.getMessage());
             }
-            public void onResponse(Call call,Response response) throws IOException {
+
+            public void onResponse(Call call, Response response) throws IOException {
                 parseJSONtoDeviceList(response.body().string());
                 homeFragment.showDeviceByDeviceClassIdCallback(deviceListFromJson);
             }

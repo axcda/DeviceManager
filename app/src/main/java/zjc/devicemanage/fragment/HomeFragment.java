@@ -106,6 +106,16 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    public void showDeviceByDeviceClassIdCallback(DeviceList deviceListFromJson) {
+        this.deviceList = deviceListFromJson;
+        
+        getActivity().runOnUiThread(() -> {
+            if (deviceClassList != null) {
+                setupEmbedDeviceAdapter();
+            }
+        });
+    }
+
     private void setupEmbedDeviceAdapter() {
         EmbedDeviceAdapter adapter = new EmbedDeviceAdapter(getContext(), deviceClassList, deviceList);
         adapter.setOnDeviceClassClickListener(deviceClassId -> {
