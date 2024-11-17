@@ -60,6 +60,14 @@ public class EmbedDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             DeviceViewHolder deviceHolder = (DeviceViewHolder) holder;
             Device device = deviceList.getResult().get(position - 1);
             bindDeviceData(deviceHolder, device);
+            
+            // Add click listener to cart icon
+            deviceHolder.deviceLl.findViewById(R.id.device_viewholder_addcart_iv)
+                .setOnClickListener(v -> {
+                    if (onAddToCartClickListener != null) {
+                        onAddToCartClickListener.onAddToCartClick(device.getDeviceID());
+                    }
+                });
         }
     }
 
@@ -145,5 +153,16 @@ public class EmbedDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public void setOnDeviceClassClickListener(OnDeviceClassClickListener listener) {
         this.onDeviceClassClickListener = listener;
+    }
+
+    // Add interface for cart click
+    public interface OnAddToCartClickListener {
+        void onAddToCartClick(String deviceId);
+    }
+
+    private OnAddToCartClickListener onAddToCartClickListener;
+
+    public void setOnAddToCartClickListener(OnAddToCartClickListener listener) {
+        this.onAddToCartClickListener = listener;
     }
 } 

@@ -98,7 +98,6 @@ public class ShopingcartServiceImp implements ShopingcartService {
         });
     }
 
-    @Override
     public void addToCart(String userId, String deviceId, String buyNum) {
         String addToCartURL = MyHttpUtil.host + "/DeviceManage/addToCart" +
                 "?userId=" + userId +
@@ -125,12 +124,14 @@ public class ShopingcartServiceImp implements ShopingcartService {
     }
 
     @Override
-    public void addShopingcart(final String addDeviceID, String addBuyNum, String addUserID) {
-        // 构造请求URL
+    public void addShopingcart(String addDeviceID, String addBuyNum, String addUserID) {
+        // 修改参数名以匹配服务器端期望的参数名
         String addShopingcartURL = MyHttpUtil.host + "/DeviceManage/addShopingcart" +
-                "?addDeviceID=" + addDeviceID +
-                "&addBuyNum=" + addBuyNum +
-                "&addUserID=" + addUserID;
+                "?addDeviceID=" + addDeviceID +  // 改为addDeviceID
+                "&addBuyNum=" + addBuyNum +      // 改为addBuyNum
+                "&addUserID=" + addUserID;       // 改为addUserID
+        
+        Log.i("zjc", "Adding to cart URL: " + addShopingcartURL);
 
         MyHttpUtil.sendOkhttpGetRequest(addShopingcartURL, new Callback() {
             @Override
@@ -143,14 +144,17 @@ public class ShopingcartServiceImp implements ShopingcartService {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
-                if ("success".equals(result)) {
-                    if (shopingcartFragment != null) {
-                        shopingcartFragment.showAddShopingcartCallback(addDeviceID);
+                Log.i("zjc", "Add to cart response: " + result);
+                
+                if (result.contains("成功")) {
+                    if (homeFragment != null) {
+                        homeFragment.showAddShopingcartCallback(addDeviceID);
                     } else {
-                        Log.e("zjc", "ShopingcartFragment is null.");
+                        Log.e("zjc", "HomeFragment is null.");
                         MyApplication.subThreadToast("添加购物车成功，但未能更新界面。");
                     }
                 } else {
+                    Log.e("zjc", "Add to cart failed with response: " + result);
                     MyApplication.subThreadToast("添加购物车失败");
                 }
             }

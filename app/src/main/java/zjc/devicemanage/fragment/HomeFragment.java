@@ -31,6 +31,9 @@ import zjc.devicemanage.service.DeviceClassService;
 import zjc.devicemanage.service.DeviceService;
 import zjc.devicemanage.service.imp.DeviceClassServiceImp;
 import zjc.devicemanage.service.imp.DeviceServiceImp;
+import zjc.devicemanage.service.imp.ShopingcartServiceImp;
+import zjc.devicemanage.service.ShopingcartService;
+import zjc.devicemanage.util.MyApplication;
 
 public class HomeFragment extends Fragment {
     private DeviceAdapter deviceAdapter;
@@ -118,9 +121,21 @@ public class HomeFragment extends Fragment {
 
     private void setupEmbedDeviceAdapter() {
         EmbedDeviceAdapter adapter = new EmbedDeviceAdapter(getContext(), deviceClassList, deviceList);
+        
+        // Existing device class click listener
         adapter.setOnDeviceClassClickListener(deviceClassId -> {
-            // Handle device class click
             deviceService.findDeviceByDeviceClassId(Integer.parseInt(deviceClassId));
+        });
+
+        // Add cart click listener
+        adapter.setOnAddToCartClickListener(deviceId -> {
+            String userId = MyApplication.getUser_id();
+            if (userId != null && !userId.isEmpty()) {
+                ShopingcartService cartService = new ShopingcartServiceImp(this);
+                cartService.addShopingcart(deviceId, "1", userId);
+            } else {
+                Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
+            }
         });
 
         fragment_home_recyclerView.setAdapter(adapter);
